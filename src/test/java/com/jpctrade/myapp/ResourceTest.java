@@ -1,4 +1,4 @@
-package com.jpctrade;
+package com.jpctrade.myapp;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -10,8 +10,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import com.jpctrade.Main;
 
-public class MyResourceTest {
+public class ResourceTest {
 
     private HttpServer server;
     private WebTarget target;
@@ -42,7 +43,16 @@ public class MyResourceTest {
      */
     @Test
     public void testGetIt() {
-        String responseMsg = target.path("myresource").request().get(String.class);
+        String responseMsg = target.path("myapp").request().get(String.class);
         assertEquals("Got it!", responseMsg);
+    }
+
+    /**
+     * Test to see that the message "Got it!" is sent in the response.
+     */
+    @Test
+    public void testGetMyresource() {
+        String responseMsg = target.path("myapp/myresource").request().get(String.class);
+        assertEquals("Got my resource!", responseMsg);
     }
 }

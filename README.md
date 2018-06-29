@@ -3,7 +3,7 @@
 ## init project
 
 ```
-mvn install
+mvn clean install
 ```
 
 ## run test
@@ -18,7 +18,8 @@ mvn clean test
 mvn package
 ```
 
-## run jar
+## run standalone jar
 
 ```
-java -jar
+java -jar omikuji-x.x.x-jar-with-dependancies.jar
+```
