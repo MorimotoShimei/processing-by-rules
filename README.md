@@ -12,6 +12,12 @@ mvn clean install
 mvn clean test
 ```
 
+## run server
+
+```
+mvn exec:java
+```
+
 ## build jar
 
 ```
