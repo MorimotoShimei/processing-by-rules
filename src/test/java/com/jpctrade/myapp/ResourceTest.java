@@ -3,14 +3,14 @@ package com.jpctrade.myapp;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-
 import org.glassfish.grizzly.http.server.HttpServer;
-
+import org.json.JSONException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 import com.jpctrade.Main;
+import org.junit.Assert;
+import uk.co.datumedge.hamcrest.json.SameJSONAs;
 
 public class ResourceTest {
 
@@ -24,13 +24,7 @@ public class ResourceTest {
         // create the client
         Client c = ClientBuilder.newClient();
 
-        // uncomment the following line if you want to enable
-        // support for JSON in the client (you also have to uncomment
-        // dependency on jersey-media-json module in pom.xml and Main.startServer())
-        // --
-        // c.configuration().enable(new org.glassfish.jersey.media.json.JsonJaxbFeature());
-
-        target = c.target(Main.BASE_URI);
+        target = c.target(Main.API_BASE_URI);
     }
 
     @After
@@ -38,13 +32,18 @@ public class ResourceTest {
         server.shutdown();
     }
 
-    /**
-     * Test to see that the message "Got it!" is sent in the response.
-     */
     @Test
-    public void testGetIt() {
+    public void testPost() throws JSONException {
+        String json = "{\"a\":\"000\",\"b\":\"111\"}";
+        String responseMsg = target.path("myapp").request().post(null, String.class);
+        // 余計な要素があってもマッチ
+        Assert.assertThat(responseMsg, SameJSONAs.sameJSONAs(json).allowingExtraUnexpectedFields());
+    }
+
+    @Test
+    public void testGet() {
         String responseMsg = target.path("myapp").request().get(String.class);
-        assertEquals("Got it!", responseMsg);
+        Assert.assertEquals("Got it!", responseMsg);
     }
 
     /**
@@ -53,6 +52,14 @@ public class ResourceTest {
     @Test
     public void testGetMyresource() {
         String responseMsg = target.path("myapp/myresource").request().get(String.class);
-        assertEquals("Got my resource!", responseMsg);
+        Assert.assertEquals("Got my resource!", responseMsg);
+    }
+
+    @Test
+    public void testPostMyresource() throws JSONException {
+        String json = "[\"b\",\"a\"]";
+        String responseMsg = target.path("myapp/myresource").request().post(null, String.class);
+        // 順番が入れ替わっていてもマッチ
+        Assert.assertThat(responseMsg, SameJSONAs.sameJSONAs(json).allowingAnyArrayOrdering());
     }
 }
