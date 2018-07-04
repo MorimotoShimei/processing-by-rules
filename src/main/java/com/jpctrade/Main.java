@@ -28,7 +28,7 @@ public class Main {
      * @throws IOException
      */
     public static HttpServer startServer() throws IOException {
-        final ResourceConfig rc = new ResourceConfig().packages("com.jpctrade.myapp");
+        final ResourceConfig rc = new ResourceConfig().packages("com.jpctrade.samples");
         final StaticHttpHandler staticHttpHandler = new StaticHttpHandler(
                 new File(".").getAbsolutePath() + "/src/main/resources/static");
 

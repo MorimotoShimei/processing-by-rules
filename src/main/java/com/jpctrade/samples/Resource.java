@@ -1,4 +1,4 @@
-package com.jpctrade.myapp;
+package com.jpctrade.samples;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Root resource (exposed at "myresource" path)
  */
-@Path("myapp")
+@Path("samples")
 public class Resource {
 
     @POST

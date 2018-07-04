@@ -13,7 +13,7 @@
  * limitations under the License.
 */
 
-package drools.models;
+package drools.models.samples;
 
 global java.util.Set controlSet;
 

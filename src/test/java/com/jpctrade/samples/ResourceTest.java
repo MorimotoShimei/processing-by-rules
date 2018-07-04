@@ -1,4 +1,4 @@
-package com.jpctrade.myapp;
+package com.jpctrade.samples;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -16,6 +16,8 @@ public class ResourceTest {
 
     private HttpServer server;
     private WebTarget target;
+    static final String myPath = "samples";
+    static final String mySubPath = "myresource";
 
     @Before
     public void setUp() throws Exception {
@@ -35,14 +37,14 @@ public class ResourceTest {
     @Test
     public void testPost() throws JSONException {
         String json = "{\"a\":\"000\",\"b\":\"111\"}";
-        String responseMsg = target.path("myapp").request().post(null, String.class);
+        String responseMsg = target.path(myPath).request().post(null, String.class);
         // 余計な要素があってもマッチ
         Assert.assertThat(responseMsg, SameJSONAs.sameJSONAs(json).allowingExtraUnexpectedFields());
     }
 
     @Test
     public void testGet() {
-        String responseMsg = target.path("myapp").request().get(String.class);
+        String responseMsg = target.path(myPath).request().get(String.class);
         Assert.assertEquals("Got it!", responseMsg);
     }
 
@@ -51,14 +53,14 @@ public class ResourceTest {
      */
     @Test
     public void testGetMyresource() {
-        String responseMsg = target.path("myapp/myresource").request().get(String.class);
+        String responseMsg = target.path(myPath + "/" + mySubPath).request().get(String.class);
         Assert.assertEquals("Got my resource!", responseMsg);
     }
 
     @Test
     public void testPostMyresource() throws JSONException {
         String json = "[\"b\",\"a\"]";
-        String responseMsg = target.path("myapp/myresource").request().post(null, String.class);
+        String responseMsg = target.path(myPath + "/" + mySubPath).request().post(null, String.class);
         // 順番が入れ替わっていてもマッチ
         Assert.assertThat(responseMsg, SameJSONAs.sameJSONAs(json).allowingAnyArrayOrdering());
     }
