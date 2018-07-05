@@ -5,10 +5,12 @@ import org.junit.Before;
 import org.junit.Test;
 import drools.Bre;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.Agenda;
 import drools.models.samples.Measurement;
 import drools.models.samples.SetDiscount.Product;
 import drools.models.samples.SetDiscount.OrderItem;
 import drools.models.samples.SetDiscount.Order;
+import drools.models.samples.SetDiscount.OrderParameter;
 import java.util.HashSet;
 import java.util.Set;
 import static org.junit.Assert.*;
@@ -71,9 +73,9 @@ public class BreTest {
         final OrderItem[] inputData = {
             new OrderItem(new Product("A", "商品1", 4000), 1),
             new OrderItem(new Product("B", "商品2", 3000), 4),
-            new OrderItem(new Product("C", "商品3", 3500), 3),
+            new OrderItem(new Product("C", "商品3", 3500), 4),
             new OrderItem(new Product("A", "商品4", 4500), 2),
-            new OrderItem(new Product("D", "商品5", 4000), 1)
+            new OrderItem(new Product("D", "商品5", 4500), 2)
         };
 
         final Order order = new Order("order:001");
@@ -81,5 +83,28 @@ public class BreTest {
         Set<String> check = new HashSet<String>();
         setDiscountSession.setGlobal("controlSetDiscountSet", check);
         setDiscountSession.insert(order);
+
+        for (OrderItem item : inputData) {
+            for (int i = 0; i < item.getQty(); i++) {
+                setDiscountSession.insert(new OrderParameter(item.getProduct()));
+            }
+        }
+
+        Agenda agenda = setDiscountSession.getAgenda();
+        agenda.getAgendaGroup("注文").setFocus();
+        agenda.getAgendaGroup("注文明細").setFocus();
+
+        setDiscountSession.fireAllRules();
+
+        System.out.println(String.format("合計金額 = %s, 割引率 = %s", order.getTotalPrice(), order.getDiscountRatio()));
+
+        order.getItemList().forEach(it -> {
+            System.out.println(String.format(
+                    "内訳 : <%s> %s x %s = %s",
+                it.getQty(),
+                it.getProduct().getCategory(),
+                it.getProduct().getName(),
+                it.getTotalPrice()));
+        });
     }
 }

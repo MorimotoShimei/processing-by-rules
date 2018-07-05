@@ -7,6 +7,10 @@ public class OrderParameter {
     Product product;
     boolean done = false;
 
+    public OrderParameter(Product product) {
+        this.product = product;
+    }
+
     public OrderParameter(Product product, boolean done) {
         this.product = product;
         this.done = done;

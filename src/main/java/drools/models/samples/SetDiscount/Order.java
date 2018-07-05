@@ -22,7 +22,7 @@ public class Order {
         this.discountRatio = ratio;
     }
 
-    public double getDiscountRaio() {
+    public double getDiscountRatio() {
         return this.discountRatio;
     }
 
