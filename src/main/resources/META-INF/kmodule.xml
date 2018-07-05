@@ -2,5 +2,6 @@
 <kmodule xmlns="http://www.drools.org/xsd/kmodule">
   <kbase name="kBase1" packages="samples">
     <ksession name="ksession-samples-measurement"/>
+    <ksession name="ksession-samples-setdiscount"/>
   </kbase>
 </kmodule>
