@@ -12,11 +12,12 @@ import com.jpctrade.Main;
 import org.junit.Assert;
 import uk.co.datumedge.hamcrest.json.SameJSONAs;
 
-public class EchoTest {
+public class SetDiscountTest {
+
     private HttpServer server;
     private WebTarget target;
     static final String myPath = "samples";
-    static final String myEchoPath = "echo";
+    static final String mySubPath = "setdiscount";
 
     @Before
     public void setUp() throws Exception {
@@ -34,16 +35,17 @@ public class EchoTest {
     }
 
     @Test
-    public void testGetEcho() {
-        String responseMsg = target.path(myPath + "/" + myEchoPath + "/" + "GetEchoTest").request().get(String.class);
-        Assert.assertEquals("GetEchoTest", responseMsg);
+    public void testPost() throws JSONException {
+        String json = "[\"b\",\"a\"]";
+        String responseMsg = target.path(myPath + "/" + mySubPath).request().post(null, String.class);
+        // 余計な要素があってもマッチ
+        // Assert.assertThat(responseMsg, SameJSONAs.sameJSONAs(json).allowingExtraUnexpectedFields());
+        Assert.assertThat(responseMsg, SameJSONAs.sameJSONAs(json).allowingAnyArrayOrdering());
     }
 
     @Test
-    public void testPostEcho() throws JSONException {
-        String json = "[\"b\",\"a\"]";
-        String responseMsg = target.path(myPath + "/" + myEchoPath).request().post(null, String.class);
-        // 順番が入れ替わっていてもマッチ
-        Assert.assertThat(responseMsg, SameJSONAs.sameJSONAs(json).allowingAnyArrayOrdering());
+    public void testGet() {
+        String responseMsg = target.path(myPath + "/" + mySubPath + "/" + "test").request().get(String.class);
+        Assert.assertEquals("test", responseMsg);
     }
 }
